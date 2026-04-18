@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TripVote — Plan Together, Go Together</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+ 
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="/" class="logo" onclick="navigate('home')">✈ TripVote</a>
+    <button class="btn-nav" onclick="navigate('create')">Plan a Trip</button>
+  </nav>
+ 
+  <!-- PAGES -->
+  <div id="page-home" class="page active">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-badge">✦ Group travel, reimagined</div>
+      <h1 class="hero-title">Stop the group chat <em>chaos.</em></h1>
+      <p class="hero-sub">TripVote brings everyone's preferences together, lets AI pick the perfect destinations, and lets the group vote. Democracy wins every time.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="navigate('create')">Create a Trip Link</button>
+        <a href="#how-it-works" class="btn-ghost">See how it works ↓</a>
+      </div>
+      <div class="hero-visual">
+        <div class="float-card fc1">🏖️ Bali, Indonesia<span>4 votes</span></div>
+        <div class="float-card fc2">🏔️ Swiss Alps<span>2 votes</span></div>
+        <div class="float-card fc3">🗼 Tokyo, Japan<span>6 votes</span></div>
+      </div>
+    </section>
+ 
+    <!-- How It Works -->
+    <section class="section" id="how-it-works">
+      <p class="section-label">The process</p>
+      <h2 class="section-title">How It Works</h2>
+      <div class="steps">
+        <div class="step-card">
+          <div class="step-icon">🔗</div>
+          <div class="step-num">1.</div>
+          <h3>Create a trip link</h3>
+          <p>Start your adventure with one click</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card">
+          <div class="step-icon">📋</div>
+          <div class="step-num">2.</div>
+          <h3>Friends fill one quick questionnaire</h3>
+          <p>Quick preferences from everyone</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card">
+          <div class="step-icon">🧭</div>
+          <div class="step-num">3.</div>
+          <h3>AI suggests 3 perfect destinations</h3>
+          <p>Matched to your group's needs</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card">
+          <div class="step-icon">🗳️</div>
+          <div class="step-num">4.</div>
+          <h3>Vote and book</h3>
+          <p>Democracy wins!</p>
+        </div>
+      </div>
+    </section>
+  </div>
+ 
+  <!-- CREATE TRIP PAGE -->
+  <div id="page-create" class="page">
+    <div class="form-container">
+      <div class="form-header">
+        <p class="section-label">Step 1</p>
+        <h2>Create Your Trip</h2>
+        <p>Give your trip a name and we'll generate a shareable link for your group.</p>
+      </div>
+      <div class="form-card">
+        <div class="field">
+          <label>Trip Name</label>
+          <input type="text" id="trip-name" placeholder="Summer 2025 Adventure" />
+        </div>
+        <div class="field">
+          <label>Your Name</label>
+          <input type="text" id="creator-name" placeholder="Your name" />
+        </div>
+        <button class="btn-primary full" onclick="createTrip()">Generate Trip Link →</button>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- SHARE PAGE -->
+  <div id="page-share" class="page">
+    <div class="form-container">
+      <div class="form-header">
+        <div class="success-badge">✓ Trip Created!</div>
+        <h2>Share with your crew</h2>
+        <p>Send this link to everyone. Once they've all filled it out, come back to get AI suggestions!</p>
+      </div>
+      <div class="form-card">
+        <div class="link-display">
+          <span id="share-link-text"></span>
+          <button onclick="copyLink()">Copy</button>
+        </div>
+        <div class="trip-info">
+          <span>Responses: <strong id="response-count">0</strong></span>
+          <button class="btn-secondary" onclick="refreshCount()">↻ Refresh</button>
+        </div>
+        <button class="btn-primary full" onclick="getSuggestions()">Get AI Suggestions →</button>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- QUESTIONNAIRE PAGE -->
+  <div id="page-questionnaire" class="page">
+    <div class="form-container">
+      <div class="form-header">
+        <p class="section-label">Step 2</p>
+        <h2>Your Preferences</h2>
+        <p>Quick questions — takes 30 seconds!</p>
+      </div>
+      <div class="form-card">
+        <div class="field">
+          <label>Your Name</label>
+          <input type="text" id="q-name" placeholder="Your name" />
+        </div>
+        <div class="field">
+          <label>Budget</label>
+          <div class="option-group" id="budget-options">
+            <button class="option-btn" onclick="selectOption('budget', 'budget', this, 'low')">💸 Budget</button>
+            <button class="option-btn" onclick="selectOption('budget', 'budget', this, 'medium')">💳 Medium</button>
+            <button class="option-btn" onclick="selectOption('budget', 'budget', this, 'luxury')">💎 Luxury</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Trip Vibe</label>
+          <div class="option-group" id="vibe-options">
+            <button class="option-btn" onclick="selectOption('vibe', 'vibe', this, 'beach')">🏖️ Beach</button>
+            <button class="option-btn" onclick="selectOption('vibe', 'vibe', this, 'mountain')">🏔️ Mountain</button>
+            <button class="option-btn" onclick="selectOption('vibe', 'vibe', this, 'city')">🏙️ City</button>
+            <button class="option-btn" onclick="selectOption('vibe', 'vibe', this, 'adventure')">🧗 Adventure</button>
+            <button class="option-btn" onclick="selectOption('vibe', 'vibe', this, 'culture')">🏛️ Culture</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Duration</label>
+          <div class="option-group" id="duration-options">
+            <button class="option-btn" onclick="selectOption('duration', 'duration', this, 'weekend')">Weekend</button>
+            <button class="option-btn" onclick="selectOption('duration', 'duration', this, '1week')">1 Week</button>
+            <button class="option-btn" onclick="selectOption('duration', 'duration', this, '2weeks')">2 Weeks</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Any notes? <span style="opacity:.5">(optional)</span></label>
+          <input type="text" id="q-notes" placeholder="Allergies, accessibility needs, etc." />
+        </div>
+        <button class="btn-primary full" onclick="submitQuestionnaire()">Submit My Preferences →</button>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- SUGGESTIONS PAGE -->
+  <div id="page-suggestions" class="page">
+    <div class="form-container wide">
+      <div class="form-header">
+        <p class="section-label">Step 3 → 4</p>
+        <h2>AI Picked These For You</h2>
+        <p>Based on your group's preferences. Vote for your favorite!</p>
+      </div>
+      <div class="destinations-grid" id="destinations-grid"></div>
+      <div class="vote-results" id="vote-results" style="display:none">
+        <h3>Current Votes</h3>
+        <div id="vote-bars"></div>
+        <div id="winner-display"></div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- TOAST -->
+  <div id="toast" class="toast"></div>
+ 
+  <script src="app.js"></script>
+</body>
+</html>
+ 
